@@ -24,7 +24,8 @@ Words.convert = function (filepath) {
 
             // Convert HTML...
             const words = document.createElement("div");
-            words.innerHTML = xhr.response;
+            // Use responseText as a fallback for broader XHR compatibility
+            words.innerHTML = (xhr && (xhr.responseText !== undefined ? xhr.responseText : xhr.response)) || "";
             const paragraphs = words.querySelectorAll("p");
 
             // ...to a JSON
@@ -32,7 +33,7 @@ Words.convert = function (filepath) {
             for (let i = 0; i < paragraphs.length; i++) {
                 const p = paragraphs[i];
                 const id = p.id;
-                Words.text[id] = p.innerHTML;
+                if (id) Words.text[id] = p.innerHTML;
             }
 
             // Fulfil promise!
